@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nyxo Pixel | Next-Gen Digital Studio</title>
+    <meta name="description" content="Nyxo Pixel - Specialized in Web, Mobile, Data Intelligence and Creative Media.">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bright-cyan: #00f2fe;
+            --neon-purple: #9d50bb;
+            --hot-pink: #ff00cc;
+            --deep-space: #020205;
+            --gold-glitter: linear-gradient(45deg, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.15);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--deep-space);
+            color: white;
+            font-family: 'Space Grotesk', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* --- COMBINED BACKGROUND ELEMENTS --- */
+        #canvas-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -2;
+            background: radial-gradient(circle at 50% 50%, #0a0a1a 0%, #020205 100%);
+        }
+
+        .bg-glow {
+            position: fixed; width: 450px; height: 450px;
+            border-radius: 50%; opacity: 0.2; z-index: -1; filter: blur(120px);
+            animation: drift 25s infinite alternate ease-in-out;
+        }
+        .glow-1 { background: var(--neon-purple); top: -10%; left: -10%; }
+        .glow-2 { background: var(--hot-pink); bottom: -10%; right: -10%; animation-delay: -5s; }
+        .glow-3 { background: var(--bright-cyan); top: 40%; left: 50%; opacity: 0.1; }
+
+        @keyframes drift {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(100px, 100px) scale(1.2); }
+        }
+
+        .reveal { opacity: 0; transform: translateY(80px); transition: all 1.2s cubic-bezier(0.17, 0.85, 0.43, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        /* --- HEADER --- */
+        header {
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            width: 90%; padding: 15px 40px;
+            background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border); border-radius: 100px;
+            display: flex; justify-content: space-between; align-items: center; z-index: 1000;
+        }
+
+        .header-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+        .logo-pixel {
+            width: 25px; height: 25px; background: linear-gradient(45deg, var(--bright-cyan), var(--hot-pink));
+            box-shadow: 0 0 20px var(--bright-cyan); animation: rotatePixel 4s infinite linear;
+        }
+        @keyframes rotatePixel { 100% { transform: rotate(360deg); } }
+        .logo-text {
+            font-family: 'Syncopate'; font-weight: 700; font-size: 1.4rem;
+            background: linear-gradient(to right, #fff, var(--bright-cyan));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+
+        nav a { color: #ccc; text-decoration: none; margin-left: 25px; font-size: 0.75rem; letter-spacing: 2px; transition: 0.3s; }
+        nav a:hover { color: var(--bright-cyan); text-shadow: 0 0 10px var(--bright-cyan); }
+
+        /* --- HERO & ANIMATIONS --- */
+        .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; position: relative;}
+        
+        .hero h1 { font-family: 'Syncopate'; font-size: 8vw; line-height: 1; margin-bottom: 20px; }
+        
+        .glitter-text {
+            background: linear-gradient(90deg, var(--bright-cyan), #fff, var(--bright-cyan), #fff);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 3s linear infinite;
+            text-shadow: 0 0 15px rgba(0, 242, 254, 0.5);
+        }
+        @keyframes shine { to { background-position: 200% center; } }
+
+        .word-reveal span {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: wordIn 0.8s forwards;
+            letter-spacing: 6px;
+            color: var(--bright-cyan);
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        @keyframes wordIn { to { opacity: 1; transform: translateY(0); } }
+
+        .floating-obj {
+            position: absolute; width: 60px; height: 60px;
+            background: rgba(0, 242, 254, 0.1); border: 1px solid var(--bright-cyan);
+            border-radius: 10px; animation: float 6s infinite ease-in-out;
+            display: flex; align-items: center; justify-content: center;
+        }
+        @keyframes float { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-40px) rotate(20deg); } }
+
+        /* --- TECH TRACK --- */
+        .tech-track { 
+            background: rgba(255, 255, 255, 0.03); padding: 25px 0; 
+            border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border); 
+            overflow: hidden; display: flex;
+        }
+        .track-move { display: flex; animation: marquee 30s linear infinite; white-space: nowrap; }
+        .tech-item { 
+            font-family: 'Syncopate'; font-size: 1.1rem; margin: 0 40px; 
+            background: linear-gradient(90deg, var(--bright-cyan), #fff, var(--hot-pink));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+        /* --- EXPERTISE --- */
+        .section-padding { padding: 100px 10%; }
+        .center-title { 
+            text-align: center; font-family: 'Syncopate'; margin-bottom: 80px; font-size: 3.5rem; 
+            background: linear-gradient(to bottom, #fff, #444); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+
+        .expertise-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; }
+        .exp-card {
+            background: var(--glass); border: 1px solid var(--glass-border); padding: 50px 40px; border-radius: 40px;
+            transition: 0.5s; position: relative; overflow: hidden;
+        }
+        .exp-card:hover { transform: scale(1.05); border-color: var(--bright-cyan); box-shadow: 0 0 30px rgba(0, 242, 254, 0.2); }
+        .exp-card i { font-size: 3rem; margin-bottom: 25px; color: var(--bright-cyan); }
+        .exp-card h3 { font-family: 'Syncopate'; margin-bottom: 15px; }
+        .exp-card ul { list-style: none; color: #aaa; line-height: 1.8; font-size: 0.95rem; }
+        .exp-card ul li span { color: var(--bright-cyan); font-weight: bold; }
+
+        /* --- WHO WE SERVE --- */
+        .industry-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+        .ind-item {
+            padding: 40px 20px; background: rgba(255,255,255,0.02); border: 1px solid var(--glass-border);
+            border-radius: 20px; text-align: center; font-family: 'Syncopate'; font-size: 0.8rem;
+            cursor: pointer; transition: 0.4s; position: relative; z-index: 1;
+        }
+        .ind-item:hover {
+            background: var(--gold-glitter); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            border-color: #aa771c; transform: translateY(-5px); font-weight: 700;
+        }
+
+        /* --- TEAM --- */
+        .minds-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px; }
+        .founder-profile {
+            background: linear-gradient(135deg, #0a0a0e 0%, #050505 100%);
+            border: 1px solid var(--glass-border); border-radius: 50px;
+            padding: 60px 50px; position: relative; overflow: hidden; transition: 0.5s;
+        }
+        .founder-profile:hover { transform: translateY(-15px); border-color: var(--hot-pink); }
+        .founder-role { font-family: 'Syncopate'; color: var(--hot-pink); font-size: 0.7rem; letter-spacing: 4px; display: block; margin-bottom: 20px; }
+        .founder-name { font-family: 'Syncopate'; font-size: 2.2rem; line-height: 1.1; margin-bottom: 25px; }
+        .founder-bio { color: #888; font-size: 1rem; line-height: 1.6; margin-bottom: 30px; }
+        .founder-highlight { 
+            display: flex; justify-content: space-between; border-top: 1px solid var(--glass-border);
+            padding-top: 25px; margin-top: 20px;
+        }
+        .h-item span { display: block; font-size: 0.6rem; color: #555; text-transform: uppercase; margin-bottom: 5px; }
+        .h-item strong { font-family: 'Syncopate'; color: var(--bright-cyan); font-size: 1rem; }
+
+        /* --- PORTFOLIO SLIDER --- */
+        .slider-wrapper { position: relative; width: 100%; height: 500px; border-radius: 40px; overflow: hidden; border: 1px solid var(--glass-border); }
+        .slide-img { width: 100%; height: 100%; object-fit: cover; position: absolute; opacity: 0; transition: 1s; }
+        .slide-img.active { opacity: 1; }
+
+        /* --- CONTACT --- */
+        .contact-container { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; background: var(--glass); padding: 60px; border-radius: 50px; border: 1px solid var(--glass-border); }
+        input, select, textarea { width: 100%; padding: 18px; margin-bottom: 20px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: white; border-radius: 15px; font-family: 'Space Grotesk'; outline: none; }
+        .submit-btn { background: linear-gradient(45deg, var(--bright-cyan), var(--neon-purple)); color: white; border: none; padding: 20px; border-radius: 100px; font-family: 'Syncopate'; cursor: pointer; width: 100%; font-weight: bold; }
+
+        /* --- NEW GOLD SHINE EFFECT FOR FOOTER --- */
+        .gold-contact {
+            text-decoration: none;
+            color: #777;
+            transition: 0.4s ease;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        .gold-contact:hover {
+            background: var(--gold-glitter);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 8px rgba(188, 155, 63, 0.6));
+            animation: shine 2s linear infinite;
+            transform: scale(1.05);
+        }
+
+        /* --- FOOTER --- */
+        .pro-footer { background: #050505; padding: 80px 10% 40px; border-top: 1px solid var(--glass-border); }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 14vw; }
+            .minds-container { grid-template-columns: 1fr; }
+            .contact-container { grid-template-columns: 1fr; padding: 30px; }
+            .center-title { font-size: 2.2rem; }
+            .header-logo .logo-text { font-size: 1rem; }
+            nav { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow glow-1"></div>
+    <div class="bg-glow glow-2"></div>
+    <div class="bg-glow glow-3"></div>
+    
+    <canvas id="canvas-bg"></canvas>
+
+    <header>
+        <a href="#" class="header-logo">
+            <div class="logo-pixel"></div>
+            <span class="logo-text">NYXO PIXEL</span>
+        </a>
+        <nav>
+            <a href="#expertise">SERVICES</a>
+            <a href="#industries">CLIENTS</a>
+            <a href="#portfolio">WORK</a>
+            <a href="#minds">TEAM</a>
+            <a href="#contact">HIRE</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="floating-obj" style="top: 20%; left: 15%;"><i class="fas fa-code"></i></div>
+        <div class="floating-obj" style="bottom: 25%; right: 20%; animation-delay: 2s;"><i class="fas fa-microchip"></i></div>
+        <div class="floating-obj" style="top: 40%; right: 10%; animation-delay: 4s;"><i class="fas fa-bolt"></i></div>
+        
+        <h1 class="reveal">STAY<br><span class="glitter-text">BRIGHT.</span></h1>
+        <p class="word-reveal">
+            <span style="animation-delay: 0.2s;">Next-Gen</span> 
+            <span style="animation-delay: 0.4s;">Digital</span> 
+            <span style="animation-delay: 0.6s;">Architecture</span>
+        </p>
+    </section>
+
+    <div class="tech-track">
+        <div class="track-move">
+            <span class="tech-item">HTML5 / CSS3</span>
+            <span class="tech-item">REACT JS</span>
+            <span class="tech-item">PYTHON</span>
+            <span class="tech-item">JAVA SPRINGBOOT</span>
+            <span class="tech-item">SQL / MONGODB</span>
+            <span class="tech-item">MOBILE APPS</span>
+            <span class="tech-item">CANVA / VIDEO EDIT</span>
+            <span class="tech-item">DATA GOVERNANCE</span>
+            <span class="tech-item">HTML5 / CSS3</span>
+            <span class="tech-item">REACT JS</span>
+            <span class="tech-item">PYTHON</span>
+            <span class="tech-item">JAVA SPRINGBOOT</span>
+            <span class="tech-item">SQL / MONGODB</span>
+            <span class="tech-item">MOBILE APPS</span>
+            <span class="tech-item">CANVA / VIDEO EDIT</span>
+            <span class="tech-item">DATA GOVERNANCE</span>
+        </div>
+    </div>
+
+    <section id="expertise" class="section-padding reveal">
+        <h2 class="center-title">OUR EXPERTISE</h2>
+        <div class="expertise-grid">
+            <div class="exp-card">
+                <i class="fas fa-code"></i>
+                <h3>Frontend</h3>
+                <ul>
+                    <li><span>•</span> HTML, CSS, JavaScript</li>
+                    <li><span>•</span> React & React JS</li>
+                    <li><span>•</span> UI/UX Optimization</li>
+                </ul>
+            </div>
+            <div class="exp-card">
+                <i class="fas fa-database"></i>
+                <h3>Backend</h3>
+                <ul>
+                    <li><span>•</span> SQL, MySQL, SQLite</li>
+                    <li><span>•</span> MongoDB & Webforms</li>
+                    <li><span>•</span> Google Forms Integration</li>
+                </ul>
+            </div>
+            <div class="exp-card">
+                <i class="fas fa-mobile-screen"></i>
+                <h3>Mobile Dev</h3>
+                <ul>
+                    <li><span>•</span> iOS & Android Apps</li>
+                    <li><span>•</span> Native Performance</li>
+                    <li><span>•</span> Scalable Mobile Logic</li>
+                </ul>
+            </div>
+            <div class="exp-card">
+                <i class="fas fa-pen-nib"></i>
+                <h3>Design</h3>
+                <ul>
+                    <li><span>•</span> Canva Poster Making</li>
+                    <li><span>•</span> Pro Image Editing</li>
+                    <li><span>•</span> 4K Video Post-Production</li>
+                </ul>
+            </div>
+            <div class="exp-card">
+                <i class="fas fa-terminal"></i>
+                <h3>Logic</h3>
+                <ul>
+                    <li><span>•</span> Python Projects</li>
+                    <li><span>•</span> Java Springboot</li>
+                    <li><span>•</span> Custom Enterprise Apps</li>
+                </ul>
+            </div>
+            <div class="exp-card">
+                <i class="fas fa-shield-halved"></i>
+                <h3>Data Intel</h3>
+                <ul>
+                    <li><span>•</span> Data Analysis</li>
+                    <li><span>•</span> Data Governance</li>
+                    <li><span>•</span> Strategic Reporting</li>
+                </ul>
+            </div>
+        </div>
+
+        <div style="margin-top: 60px; padding: 40px; background: rgba(0, 242, 254, 0.05); border: 2px dashed var(--bright-cyan); border-radius: 30px; text-align: center;" class="reveal">
+            <h3 style="font-family: 'Syncopate'; color: var(--bright-cyan);">UNBEATABLE PRICING</h3>
+            <p style="margin-top: 10px; color: #888;">We provide the best pricing in the industry without compromising on elite quality.</p>
+        </div>
+    </section>
+
+    <section id="industries" class="section-padding reveal">
+        <h2 class="center-title">WHO WE SERVE</h2>
+        <div class="industry-grid">
+            <div class="ind-item">Colleges</div>
+            <div class="ind-item">Business Men</div>
+            <div class="ind-item">SME</div>
+            <div class="ind-item">Hospital Fields</div>
+            <div class="ind-item">IT Institutes</div>
+            <div class="ind-item">Ecommerce</div>
+            <div class="ind-item">10+ Industries</div>
+        </div>
+    </section>
+
+    <section id="portfolio" class="section-padding reveal">
+        <h2 class="center-title">LIVE PORTFOLIO</h2>
+        <div class="slider-wrapper">
+            <img src="images/1.png" class="slide-img active" alt="P1">
+            <img src="images/2.png" class="slide-img" alt="P2">
+            <img src="images/3.png" class="slide-img" alt="P3">
+            <img src="images/4.png" class="slide-img" alt="P4">
+            <img src="images/5.png" class="slide-img" alt="P5">
+            <img src="images/6.png" class="slide-img" alt="P6">
+        </div>
+    </section>
+
+    <section id="minds" class="section-padding reveal">
+        <h2 class="center-title">CREATIVE ARCHITECTS</h2>
+        <div class="minds-container">
+            <div class="founder-profile">
+                <span class="founder-role">CHIEF EXECUTIVE OFFICER</span>
+                <h2 class="founder-name">S. GOPINATH</h2>
+                <p class="founder-bio">Veteran strategist with expertise in Data Analysis & Governance. Leading Nyxo Pixel to corporate excellence.</p>
+                <div class="founder-highlight">
+                    <div class="h-item"><span>Degree</span><strong>BA</strong></div>
+                    <div class="h-item"><span>Experience</span><strong>8+ YEARS</strong></div>
+                </div>
+            </div>
+
+            <div class="founder-profile" style="border-top: 4px solid var(--bright-cyan);">
+                <span class="founder-role">FOUNDER & TECH LEAD</span>
+                <h2 class="founder-name">VENKATESH V.</h2>
+                <p class="founder-bio">B.Tech CSE visionary. Architect of high-scalability systems and complex technical logic.</p>
+                <div class="founder-highlight">
+                    <div class="h-item"><span>Degree</span><strong>B.TECH CSE</strong></div>
+                    <div class="h-item"><span>Experience</span><strong>5+ YEARS</strong></div>
+                </div>
+            </div>
+
+            <div class="founder-profile">
+                <span class="founder-role">CO-FOUNDER & STRATEGY</span>
+                <h2 class="founder-name">VASANTH KUMAR</h2>
+                <p class="founder-bio">Creative brand architect. Driving visual identity and market-dominant growth strategies.</p>
+                <div class="founder-highlight">
+                    <div class="h-item"><span>Degree</span><strong>BBA</strong></div>
+                    <div class="h-item"><span>Experience</span><strong>4+ YEARS</strong></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="section-padding reveal">
+        <div class="contact-container">
+            <div>
+                <h2 style="font-family: 'Syncopate'; font-size: 2.5rem; margin-bottom: 20px;">LET'S START?</h2>
+                <p style="color: #888; margin-bottom: 40px;">Ready to build your next-gen platform.</p>
+                <p style="margin-bottom: 15px;"><i class="fas fa-phone" style="color:var(--bright-cyan)"></i> +91 9094523224</p>
+                <p><i class="fas fa-envelope" style="color:var(--bright-cyan)"></i> nyxopixel@gmail.com</p>
+            </div>
+            
+            <form action="https://api.web3forms.com/submit" method="POST">
+                <input type="hidden" name="access_key" value="db543d50-5d13-42ea-ae78-e320c7077518">
+                <input type="text" name="name" placeholder="Full Name" required>
+                <input type="email" name="email" placeholder="Mail Address" required>
+                <input type="tel" name="phone" placeholder="Phone Number" required>
+                <select name="service" required>
+                    <option value="" disabled selected>Project Type</option>
+                    <option>Frontend / React</option>
+                    <option>Mobile App</option>
+                    <option>Data / Backend</option>
+                    <option>Design / Video</option>
+                </select>
+                <textarea name="message" placeholder="Describe your vision..." rows="4"></textarea>
+                <button type="submit" class="submit-btn">SUBMIT REQUEST</button>
+            </form>
+        </div>
+    </section>
+
+    <footer class="pro-footer">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <span class="logo-text">NYXO PIXEL</span>
+                <p style="color:#666; margin-top: 20px; font-size: 0.9rem;">Chennai, Tamil Nadu, India.</p>
+            </div>
+            <div class="footer-col">
+                <h4 style="font-family:'Syncopate'; font-size:0.7rem; color:var(--bright-cyan); margin-bottom:20px;">CONTACT US</h4>
+                <a href="tel:+919094523224" class="gold-contact"><i class="fas fa-phone"></i> +91 9094523224</a><br>
+                <a href="tel:+918778212907" class="gold-contact"><i class="fas fa-phone"></i> +91 87782 12907</a><br>
+                <a href="mailto:nyxopixel@gmail.com" class="gold-contact"><i class="fas fa-envelope"></i> nyxopixel@gmail.com</a>
+            </div>
+            <div class="footer-col">
+                <h4 style="font-family:'Syncopate'; font-size:0.7rem; color:var(--bright-cyan); margin-bottom:20px;">SOCIALS</h4>
+                <a href="https://www.linkedin.com/company/nyxo-pixel/" target="_blank" class="gold-contact"><i class="fab fa-linkedin"></i> LinkedIn</a>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 60px; color: #444; font-size: 0.7rem; letter-spacing: 2px;">
+            © 2026 NYXO PIXEL STUDIO. DESIGNED FOR THE FUTURE.
+        </div>
+    </footer>
+
+    <script>
+        window.onbeforeunload = function () { window.scrollTo(0, 0); };
+        window.onload = function() { setTimeout(() => window.scrollTo(0,0), 10); };
+
+        const canvas = document.getElementById('canvas-bg');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        function initCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2;
+                this.speedX = Math.random() * 0.4 - 0.2;
+                this.speedY = Math.random() * 0.4 - 0.2;
+            }
+            update() { 
+                this.x += this.speedX; this.y += this.speedY; 
+                if(this.x > canvas.width) this.x = 0; if(this.x < 0) this.x = canvas.width;
+                if(this.y > canvas.height) this.y = 0; if(this.y < 0) this.y = canvas.height;
+            }
+            draw() { ctx.fillStyle = 'rgba(0, 242, 254, 0.4)'; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI*2); ctx.fill(); }
+        }
+        function createParticles() { particles = []; for(let i=0; i<80; i++) particles.push(new Particle()); }
+        function animate() {
+            ctx.clearRect(0,0,canvas.width, canvas.height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animate);
+        }
+        window.addEventListener('resize', initCanvas);
+        initCanvas(); createParticles(); animate();
+
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide-img');
+        setInterval(() => {
+            if(slides.length === 0) return;
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + 1) % slides.length;
+            slides[currentSlide].classList.add('active');
+        }, 3000);
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
